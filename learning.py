@@ -110,7 +110,7 @@ class Learning(object):
                 neg_cls = sample['neg_class'].to(self.device)
                 
                 anc_embed, pos_embed, neg_embed = self.model(anc_img), self.model(pos_img), self.model(neg_img)
-                loss = self.criterion(ance_embed, pos_embed, neg_embed)
+                loss = self.criterion(anc_embed, pos_embed, neg_embed)
                 self.valid_metrics.update('loss', loss.item())
 
                 dists = self.l2_dist.forward(anc_embed, pos_embed)

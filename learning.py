@@ -117,6 +117,7 @@ class Learning(object):
                 # distances.append(dists.data.cpu().numpy())
                 distances = np.append(distances, dists.data.cpu().numpy())
                 labels = np.append(labels, np.ones(dists.size(0)))
+                print(labels)
                 # labels.append(np.ones(dists.size(0))) 
                 labels           = np.array([sublabel for label in labels for sublabel in label])
                 distances        = np.array([subdist for dist in distances for subdist in dist])

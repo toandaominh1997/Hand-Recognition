@@ -99,7 +99,7 @@ class Learning(object):
         self.model.eval()
         self.valid_metrics.reset()
         labels = list()
-        distances = list()
+        distances = []
         with torch.no_grad():
             for idx, sample in enumerate(data_loader):
                 anc_img = sample['anc_img'].to(self.device)
@@ -114,8 +114,8 @@ class Learning(object):
                 self.valid_metrics.update('loss', loss.item())
 
                 dists = self.l2_dist.forward(anc_embed, pos_embed)
-                print(dists.data.cpu().numpy())
-                distances.append(dists.data.cpu().numpy())
+                # print(dists.data.cpu().numpy())
+                distances = np.append(distances, dists.data.cpu().numpy())
                 labels.append(np.ones(dists.size(0))) 
                 labels           = np.array([sublabel for label in labels for sublabel in label])
                 distances        = np.array([subdist for dist in distances for subdist in dist])

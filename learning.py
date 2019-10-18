@@ -98,7 +98,7 @@ class Learning(object):
     def _valid_epoch(self, data_loader):
         self.model.eval()
         self.valid_metrics.reset()
-        labels = list()
+        labels = []
         distances = []
         with torch.no_grad():
             for idx, sample in enumerate(data_loader):
@@ -116,8 +116,8 @@ class Learning(object):
                 dists = self.l2_dist.forward(anc_embed, pos_embed)
                 # print(dists.data.cpu().numpy())
                 distances = np.append(distances, dists.data.cpu().numpy())
-                labels.append(np.ones(dists.size(0))) 
-                labels           = np.array([sublabel for label in labels for sublabel in label])
+                labels = np.append(labels, np.ones(dists.size(0))) 
+                labels           = np.array([label for label in labels])
                 distances        = np.array([dist for dist in distances])
                 tpr, fpr, accuracy, val, val_std, far = evaluate(distances, labels)
 

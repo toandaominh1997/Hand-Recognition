@@ -2,7 +2,7 @@ SEED: 42
 DEVICE: [0]
 # DATASET
 ROOT_DIR: /kaggle/input/hands-dataset/Hands/Hands/
-NUM_TRIPLET: 100
+NUM_TRIPLET: 100000
 FILE_NAME: HandInfo.txt
 NUM_WORKERS: 4
 BATCH_SIZE: 1

@@ -1,0 +1,47 @@
+SEED: 42
+DEVICE: [0]
+# DATASET
+ROOT_DIR: /home/toandm2/code/DATASETS/Hands/
+NUM_TRIPLET: 100
+FILE_NAME: HandInfo.csv
+NUM_WORKERS: 4
+BATCH_SIZE: 1
+
+MODEL:
+    PY: models.model
+    CLASS: FaceNetModel
+    ARGS:
+        embedding_size: 128
+        num_classes: 10000
+        pretrained: False
+CRITERION:
+    PY: torch.nn
+    CLASS: TripletMarginLoss
+    ARGS:
+        margin: 1.0
+        p: 2
+OPTIMIZER:
+    PY: torch.optim
+    CLASS: Adam
+    ARGS:
+        lr: 0.0001
+        weight_decay: 0.000005
+
+SCHEDULER:
+    PY: torch.optim.lr_scheduler
+    CLASS: ReduceLROnPlateau
+    ARGS:
+        mode: max
+        factor: 0.1
+        patience: 2
+        threshold: 0.0000001
+        min_lr: 0.0000001
+
+GRADIENT_ACCUMULATION_STEPS: 1
+GRADIENT_CLIPPING: 0.1
+NUM_EPOCH: 50
+EARLY_STOPPING: 10
+VALIDATION_FREQUENCY: 5
+SAVED_PERIOD: 5
+CHECKPOINT_DIR: ./saved/
+RESUME_PATH:

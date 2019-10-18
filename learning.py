@@ -114,7 +114,8 @@ class Learning(object):
                 self.valid_metrics.update('loss', loss.item())
 
                 dists = self.l2_dist.forward(anc_embed, pos_embed)
-                distances.append(np.array(dists.data.cpu().numpy()))
+                print(dists.data.cpu().numpy())
+                distances.append(dists.data.cpu().numpy())
                 labels.append(np.ones(dists.size(0))) 
                 labels           = np.array([sublabel for label in labels for sublabel in label])
                 distances        = np.array([subdist for dist in distances for subdist in dist])

@@ -98,7 +98,8 @@ class Learning(object):
     def _valid_epoch(self, data_loader):
         self.model.eval()
         self.valid_metrics.reset()
-        labels, distances = [], []
+        labels = list()
+        distances = list()
         with torch.no_grad():
             for idx, sample in enumerate(data_loader):
                 anc_img = sample['anc_img'].to(self.device)

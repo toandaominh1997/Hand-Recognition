@@ -118,10 +118,6 @@ class Learning(object):
                 distances = np.append(distances, dists.data.cpu().numpy())
                 labels = np.append(labels, labels.append(np.ones(dists.size(0))))
                 # labels.append(np.ones(dists.size(0))) 
-
-                dists = self.l2_dist.forward(anc_embed, neg_embed)
-                distances.append(dists.data.cpu().numpy())
-                labels.append(np.zeros(dists.size(0)))
                 labels           = np.array([sublabel for label in labels for sublabel in label])
                 distances        = np.array([subdist for dist in distances for subdist in dist])
                 tpr, fpr, accuracy, val, val_std, far = evaluate(distances, labels)

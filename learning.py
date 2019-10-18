@@ -98,8 +98,8 @@ class Learning(object):
     def _valid_epoch(self, data_loader):
         self.model.eval()
         self.valid_metrics.reset()
-        labels = list()
-        distances = list()
+        labels = []
+        distances = []
         with torch.no_grad():
             for idx, sample in enumerate(data_loader):
                 anc_img = sample['anc_img'].to(self.device)
@@ -114,8 +114,10 @@ class Learning(object):
                 self.valid_metrics.update('loss', loss.item())
 
                 dists = self.l2_dist.forward(anc_embed, pos_embed)
-                distances.append(dists.data.cpu().numpy())
-                labels.append(np.ones(dists.size(0))) 
+                # distances.append(dists.data.cpu().numpy())
+                distances = np.append(distances, dists.data.cpu().numpy())
+                labels = np.append(labels, labels.append(np.ones(dists.size(0))))
+                # labels.append(np.ones(dists.size(0))) 
 
                 dists = self.l2_dist.forward(anc_embed, neg_embed)
                 distances.append(dists.data.cpu().numpy())

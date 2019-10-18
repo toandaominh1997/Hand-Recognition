@@ -92,8 +92,8 @@ class vinDataset(Dataset):
         return len(self.training_triplets)
     
     def __read_data__(self, root_dir, file_name):
-        root_dir = '/'.join(root_dir.split('/')[:-1])
-        
+        root_dir = '/'.join(root_dir.split('/')[:-2])
+
         df = pd.read_csv(os.path.join(root_dir, file_name))
         df = df.reset_index(drop=True)
         return df 

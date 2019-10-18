@@ -9,6 +9,7 @@ from models import accuracy_score
 from utils import load_yaml, init_seed
 import importlib
 import torch
+from tqdm import tqdm_notebook as tqdm
 
 def getattribute(config, name_package, *args, **kwargs):
     module = importlib.import_module(config[name_package]['PY'])
@@ -60,7 +61,7 @@ def main():
                         checkpoint_dir = checkpoint_dir,
                         resume_path = resume_path)
     
-    learning.train(dataloaders['train'], dataloaders['valid'])
+    learning.train(tqdm(dataloaders['train']), tqdm(dataloaders['valid']))
 
 if __name__ == "__main__":
     main()

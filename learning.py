@@ -110,11 +110,11 @@ class Learning(object):
                 neg_cls = sample['neg_class'].to(self.device)
                 
                 anc_embed, pos_embed, neg_embed = self.model(anc_img), self.model(pos_img), self.model(neg_img)
-                loss = self.criterion(anc_embed, pos_embed, neg_embed)
+                loss = self.criterion(ance_embed, pos_embed, neg_embed)
                 self.valid_metrics.update('loss', loss.item())
 
                 dists = self.l2_dist.forward(anc_embed, pos_embed)
-                distances.append(dists.data.cpu().numpy())
+                distances.append(np.array(dists.data.cpu().numpy()))
                 labels.append(np.ones(dists.size(0))) 
                 labels           = np.array([sublabel for label in labels for sublabel in label])
                 distances        = np.array([subdist for dist in distances for subdist in dist])

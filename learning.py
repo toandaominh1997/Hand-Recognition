@@ -115,8 +115,8 @@ class Learning(object):
 
                 dists = self.l2_dist.forward(anc_embed, pos_embed)
                 # distances.append(dists.data.cpu().numpy())
-                distances = np.append(distances, dists.data.cpu().numpy())
-                labels = np.append(labels, np.ones(dists.size(0)))
+                distances = np.insert(distances, dists.data.cpu().numpy())
+                labels = np.insert(labels, np.ones(dists.size(0)))
                 print(labels)
                 # labels.append(np.ones(dists.size(0))) 
                 labels           = np.array([sublabel for label in labels for sublabel in label])

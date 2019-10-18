@@ -3,6 +3,9 @@ import torch
 import os
 import pandas as pd 
 import time 
+import numpy as np 
+from torch.nn.modules.distance import PairwiseDistance
+from utils import evaluate
 class Learning(object):
     def __init__(self,
             model,
@@ -37,6 +40,7 @@ class Learning(object):
         self.start_epoch = 0
         self.best_epoch = 0
         self.best_score = 0
+        self.l2_dist = PairwiseDistance(2)
         if resume_path is not None:
             self._resume_checkpoint(resume_path)
         self.train_metrics = MetricTracker('loss')
@@ -85,6 +89,7 @@ class Learning(object):
             loss = self.criterion(anc_embed, pos_embed, neg_embed)
             loss.backward()
             self.train_metrics.update('loss', loss.item())
+             
             if (idx+1) % self.grad_accumulation_steps == 0:
                 torch.nn.utils.clip_grad_norm_(self.model.parameters(), self.grad_clipping)
                 self.optimizer.step()
@@ -93,6 +98,7 @@ class Learning(object):
     def _valid_epoch(self, data_loader):
         self.model.eval()
         self.valid_metrics.reset()
+        labels, distances = [], []
         with torch.no_grad():
             for idx, sample in enumerate(data_loader):
                 anc_img = sample['anc_img'].to(self.device)
@@ -105,6 +111,19 @@ class Learning(object):
                 anc_embed, pos_embed, neg_embed = self.model(anc_img), self.model(pos_img), self.model(neg_img)
                 loss = self.criterion(anc_embed, pos_embed, neg_embed)
                 self.valid_metrics.update('loss', loss.item())
+
+                dists = self.l2_dist.forward(anc_embed, pos_embed)
+                distances.append(dists.data.cpu().numpy())
+                labels.append(np.ones(dists.size(0))) 
+
+                dists = self.l2_dist.forward(anc_embed, neg_embed)
+                distances.append(dists.data.cpu().numpy())
+                labels.append(np.zeros(dists.size(0)))
+                labels           = np.array([sublabel for label in labels for sublabel in label])
+                distances        = np.array([subdist for dist in distances for subdist in dist])
+                tpr, fpr, accuracy, val, val_std, far = evaluate(distances, labels)
+
+                self.valid_metrics.update('accuracy_score', np.mean(accuracy))
                 # for met in self.metric_ftns:
                 #     self.valid_metrics.update(met.__name__, met(output, target))
             return self.valid_metrics.result()

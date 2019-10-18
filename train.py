@@ -9,7 +9,7 @@ from models import accuracy_score
 from utils import load_yaml, init_seed
 import importlib
 import torch
-from tqdm import tqdm_notebook as tqdm
+from tqdm import tqdm
 
 def getattribute(config, name_package, *args, **kwargs):
     module = importlib.import_module(config[name_package]['PY'])

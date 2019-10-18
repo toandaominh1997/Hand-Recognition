@@ -118,7 +118,7 @@ class Learning(object):
                 distances = np.append(distances, dists.data.cpu().numpy())
                 labels.append(np.ones(dists.size(0))) 
                 labels           = np.array([sublabel for label in labels for sublabel in label])
-                distances        = np.array([subdist for dist in distances for subdist in dist])
+                distances        = np.array([dist for dist in distances])
                 tpr, fpr, accuracy, val, val_std, far = evaluate(distances, labels)
 
                 self.valid_metrics.update('accuracy_score', np.mean(accuracy))

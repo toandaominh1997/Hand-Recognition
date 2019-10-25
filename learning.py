@@ -47,6 +47,7 @@ class Learning(object):
         self.valid_metrics = MetricTracker('loss', *[m.__name__ for m in self.metric_ftns])
         
     def train(self, train_dataloader, valid_dataloader):
+        score = 0
         for epoch in range(self.start_epoch, self.num_epoch+1):
             print("{} epoch: \t start training....".format(epoch))
             start = time.time()
@@ -60,15 +61,16 @@ class Learning(object):
                 print("skip validation....")
                 continue
             print('{} epoch: \t start validation....'.format(epoch))
-            start = time.time()
-            valid_result = self._valid_epoch(valid_dataloader)
-            valid_result.update({'time': time.time() - start})
-            score = -1
-            for key, value in valid_result.items():
-                if 'score' in key and score ==-1:
-                    score = value 
-                print('   {:15s}: {}'.format(str(key), value))
+            # start = time.time()
+            # valid_result = self._valid_epoch(valid_dataloader)
+            # valid_result.update({'time': time.time() - start})
+            # score = -1
+            # for key, value in valid_result.items():
+            #     if 'score' in key and score ==-1:
+            #         score = value 
+            #     print('   {:15s}: {}'.format(str(key), value))
             
+            score+=1
             self.post_processing(score, epoch)
             if epoch - self.best_epoch > self.early_stopping:
                 print('EARLY STOPPING')
